@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ExperimentItem {
+  id          String   @id @default(cuid())
+  material    String
+  supplier    String ?
+  usage       String ?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  Experiment Experiment @relation(fields: [experimentId], references: [id])
+  experimentId String
+}
+
+model Methodology {
+  id          String   @id @default(cuid())
+  text        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  Experiment Experiment @relation(fields: [experimentId], references: [id])
+  experimentId String
+}
+
+model Instruction {
+  id          String   @id @default(cuid())
+  text        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  Experiment Experiment @relation(fields: [experimentId], references: [id])
+  experimentId String
+}
+
+model Experiment {
+  id          String   @id @default(cuid())
+  title       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  items       ExperimentItem[]
+  methodologies Methodology[]
+  instructions Instruction[]
+
+  Paper Paper @relation(fields: [paperId], references: [id])
+  paperId String
+}
+
+model Paper {
+  id          String   @id @default(cuid())
+  title       String
+  pubmedId    String
+  experiments Experiment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

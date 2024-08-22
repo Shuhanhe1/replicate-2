@@ -1,0 +1,7 @@
+{
+  "extends": ["next", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "react/display-name": "off"
+  }
+}
