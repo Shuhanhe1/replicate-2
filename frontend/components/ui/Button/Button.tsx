@@ -1,5 +1,6 @@
 import { VariantProps, cva, cx } from 'class-variance-authority';
 import { AriaAttributes, ButtonHTMLAttributes, FC } from 'react';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 const button = cva('button', {
   variants: {
@@ -22,9 +23,14 @@ const button = cva('button', {
 });
 
 export interface ButtonProps
-  extends React.DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
+  extends React.DetailedHTMLProps<
+      ButtonHTMLAttributes<HTMLButtonElement>,
+      HTMLButtonElement
+    >,
     AriaAttributes,
-    VariantProps<typeof button> {}
+    VariantProps<typeof button> {
+  loading?: boolean;
+}
 
 export const Button: FC<ButtonProps> = ({
   className,
@@ -33,6 +39,7 @@ export const Button: FC<ButtonProps> = ({
   intent,
   size,
   round,
+  loading,
   ...rest
 }) => {
   return (
@@ -40,12 +47,12 @@ export const Button: FC<ButtonProps> = ({
       className={cx(
         className,
         `flex items-center justify-center rounded-lg uppercase duration-150 ease-in-out`,
-        button({ intent, size, round }),
+        button({ intent, size, round })
       )}
-      disabled={disabled}
+      disabled={disabled || loading}
       {...rest}
     >
-      {children}
+      {loading ? <LoadingSpinner /> : children}
     </button>
   );
 };

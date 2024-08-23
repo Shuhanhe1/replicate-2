@@ -5,6 +5,7 @@ const title = cva('title', {
   variants: {
     color: {
       primary: 'text-primary-800',
+      neutral: 'text-neutral-700',
     },
     size: {
       xxs: 'text-md',

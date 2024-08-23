@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import { IoSearch } from 'react-icons/io5';
 import { cx } from 'class-variance-authority';
-import classNames from 'classnames';
 import { Field, FieldProps } from '../Field';
 
 export interface SearchFieldProps extends Omit<FieldProps, 'ref'> {
@@ -13,7 +12,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(
     return (
       <div className={cx('relative', containerClassName)}>
         <IoSearch
-          className={classNames(
+          className={cx(
             'absolute top-2.5 z-10 text-xl',
             iconPosition === 'left' ? 'left-3' : 'right-3'
           )}

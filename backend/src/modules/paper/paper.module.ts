@@ -3,9 +3,11 @@ import { PaperService } from './paper.service';
 import { PrismaModule } from '../database/prisma.module';
 import { PaperParserModule } from '../paper-parser/paper-parser.module';
 import { PubmedModule } from '../pubmed/pubmed.module';
+import { PaperController } from './paper.controller';
 
 @Module({
   imports: [PrismaModule, PaperParserModule, PubmedModule],
   providers: [PaperService],
+  controllers: [PaperController],
 })
 export class PaperModule {}

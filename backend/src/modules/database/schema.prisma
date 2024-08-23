@@ -14,8 +14,8 @@ datasource db {
 }
 
 model ExperimentItem {
-  id          String   @id @default(cuid())
-  material    String
+  id          String   @id @default(uuid())
+  material    String ?
   supplier    String ?
   usage       String ?
   createdAt   DateTime @default(now())
@@ -26,7 +26,7 @@ model ExperimentItem {
 }
 
 model Methodology {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   text        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -36,7 +36,7 @@ model Methodology {
 }
 
 model Instruction {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   text        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -46,7 +46,7 @@ model Instruction {
 }
 
 model Experiment {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   title       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -59,8 +59,10 @@ model Experiment {
 }
 
 model Paper {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   title       String
+  authors     String[]
+  tags        String[]
   pubmedId    String
   experiments Experiment[]
   createdAt   DateTime @default(now())

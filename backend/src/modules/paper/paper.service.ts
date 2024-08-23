@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { PaperParserService } from '../paper-parser/paper-parser.service';
 import { PubmedService } from '../pubmed/pubmed.service';
+import { ParsedPaper } from '../paper-parser/types/parsed-paper.type';
 
 @Injectable()
 export class PaperService {
@@ -12,12 +13,31 @@ export class PaperService {
   ) {}
 
   async parsePubmed(pubmedId: string) {
-    const pubmedData = await this.pubmedService.get(pubmedId);
-    const paperData = await this.paperParserService.parse({
-      paper: pubmedData,
+    const existingPaper = await this.prismaService.paper.findFirst({
+      where: {
+        pubmedId,
+      },
     });
 
-    await this.prismaService.paper.create({
+    if (existingPaper) {
+      throw new BadRequestException('Paper with this pubmed id already exists');
+    }
+
+    const pubmedData = await this.pubmedService.get(pubmedId);
+    let paperData: ParsedPaper;
+
+    try {
+      paperData = await this.paperParserService.parse({
+        paper: pubmedData,
+      });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException(
+        'Not able to access the pubmed paper. Make sure that the pubmed id is correct and paper has open access.',
+      );
+    }
+
+    return this.prismaService.paper.create({
       data: {
         title: paperData.title,
         pubmedId,
@@ -26,25 +46,23 @@ export class PaperService {
             title: experiment.title,
             items: {
               create: experiment.items.map((item) => ({
-                title: item.title,
-                description: item.description,
+                material: item.material,
+                supplier: item.supplier,
+                usage: item.usage,
               })),
             },
             methodologies: {
               create: experiment.methodologies.map((methodology) => ({
-                title: methodology.title,
-                description: methodology.description,
+                text: methodology.text,
               })),
             },
             instructions: {
               create: experiment.instructions.map((instruction) => ({
-                title: instruction.title,
-                description: instruction.description,
+                text: instruction.text,
               })),
             },
           })),
         },
-        }
       },
       include: {
         experiments: {
@@ -54,7 +72,7 @@ export class PaperService {
             instructions: true,
           },
         },
-      }
+      },
     });
   }
 }

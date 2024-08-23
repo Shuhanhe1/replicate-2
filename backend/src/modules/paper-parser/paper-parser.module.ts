@@ -8,5 +8,6 @@ import { PubmedModule } from '../pubmed/pubmed.module';
   imports: [OpenaiModule, PubmedModule],
   providers: [PaperParserService],
   controllers: [PaperParserController],
+  exports: [PaperParserService],
 })
 export class PaperParserModule {}

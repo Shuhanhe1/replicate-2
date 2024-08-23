@@ -3,12 +3,13 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Menu } from '@/components/common/Menu';
 import { Footer } from '@/components/common/Footer';
+import { Toaster } from '@/components/shadcn/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Conductscience - Replicate',
-  description: 'Conductscience - Replicate',
+  title: 'Conduct Science - Replicate',
+  description: 'Conduct Science - Replicate',
 };
 
 export default function RootLayout({
@@ -23,6 +24,7 @@ export default function RootLayout({
         <main className='min-h-svh'>{children}</main>
         <Footer />
         <div id='portal'></div>
+        <Toaster />
       </body>
     </html>
   );

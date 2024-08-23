@@ -16,7 +16,13 @@ export const Card: FC<CardProps> = ({
   const Tag = tag;
 
   return (
-    <Tag className={cx('bg-slate-100', className)} {...rest}>
+    <Tag
+      className={cx(
+        'rounded-lg border border-gray-200 bg-slate-100 p-4',
+        className
+      )}
+      {...rest}
+    >
       {children}
     </Tag>
   );

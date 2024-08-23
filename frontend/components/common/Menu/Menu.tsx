@@ -6,7 +6,6 @@ import { MenuItem } from '../../../common/types';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { MobileMenu } from './MobileMenu';
 import { cx } from 'class-variance-authority';
-import classNames from 'classnames';
 import { css } from '@emotion/css';
 import { MenuIcons } from './MenuIcons';
 import { Container } from '@/components/ui/Container';
@@ -1146,7 +1145,7 @@ export const Menu: FC<MenuProps> = () => {
               <MenuIcons className='hidden text-xl md:flex' hideShopIcon />
               <RxHamburgerMenu
                 className={cx(
-                  'text-primary-800 absolute right-6 top-6 cursor-pointer text-2xl md:static',
+                  'absolute right-6 top-6 cursor-pointer text-2xl text-primary-800 md:static',
                   {
                     'xl:hidden': !isSticky,
                   }
@@ -1162,7 +1161,7 @@ export const Menu: FC<MenuProps> = () => {
       </div>
       <ClientPortal selector='portal'>
         <div
-          className={classNames(
+          className={cx(
             'sticky bottom-0 left-0 z-20 w-full bg-white py-6 shadow-md md:hidden',
             { hidden: !isSticky },
             css`

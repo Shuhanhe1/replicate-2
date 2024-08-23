@@ -12,9 +12,13 @@ export class PaperParserService {
                 the output should be in this structure:
                 {
                   "title": "Paper title",
+                  "tags": ["tag1", "tag2"],
+                  "authors": ["author1", "author2"],
                   "experiments": [
                     {
-                      "title": "Experiment1",
+                      "title": "Experiment title or number if title not specified (Experiment 1)",
+                      "authors": ["author1", "author2"],
+                      "tags": ["tag1", "tag2"],
                       "items": [
                         {"material": "Material1", "supplier": "Supplier1", "usage": "Usage1"},
                         {"material": "Material2", "supplier": "Supplier2", "usage": "Usage2"}
@@ -26,12 +30,14 @@ export class PaperParserService {
                 }
               as for instructions and methodologies do not include it's number
               return only json format.
+              if no data for some experiment item field return null
             Paper: ${JSON.stringify(payload.paper)}
             `,
     });
 
     const json = JSON.parse(output.replace('```json', '').replace('```', ''));
 
+    console.log(JSON.stringify(json, null, 2));
     // validate the output
     if (!json.experiments) {
       throw new Error('Output should include experiments');
@@ -54,20 +60,6 @@ export class PaperParserService {
         throw new Error('Items should be an array');
       }
 
-      for (const item of experiment.items) {
-        if (!item.material) {
-          throw new Error('Item should include material');
-        }
-
-        if (!item.supplier) {
-          throw new Error('Item should include supplier');
-        }
-
-        if (!item.usage) {
-          throw new Error('Item should include usage');
-        }
-      }
-
       if (!experiment.methodologies) {
         throw new Error('Experiment should include methodologies');
       }
@@ -83,6 +75,26 @@ export class PaperParserService {
       if (!Array.isArray(experiment.instructions)) {
         throw new Error('Instructions should be an array');
       }
+    }
+
+    if (!json.title) {
+      throw new Error('Output should include title');
+    }
+
+    if (!json.tags) {
+      throw new Error('Output should include tags');
+    }
+
+    if (!Array.isArray(json.tags)) {
+      throw new Error('Tags should be an array');
+    }
+
+    if (!json.authors) {
+      throw new Error('Output should include authors');
+    }
+
+    if (!Array.isArray(json.authors)) {
+      throw new Error('Authors should be an array');
     }
 
     return json;
