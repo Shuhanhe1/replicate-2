@@ -4,6 +4,7 @@ import './globals.css';
 import { Menu } from '@/components/common/Menu';
 import { Footer } from '@/components/common/Footer';
 import { Toaster } from '@/components/shadcn/ui/toaster';
+import { getUserFromHeaders } from '@/common/utils/getUserFromHeaders';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,9 +15,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+  params,
+}: {
   children: React.ReactNode;
-}>) {
+  params: any;
+}) {
+  const user = getUserFromHeaders();
+  params.user = user;
   return (
     <html lang='en'>
       <body className={inter.className}>

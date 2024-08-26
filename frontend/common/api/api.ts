@@ -11,6 +11,29 @@ export const api = axios.create({
   withCredentials: true,
 });
 
+api.interceptors.request.use(async (config) => {
+  if (isServer) {
+    const { cookies } = await import('next/headers');
+    const token = cookies().get('accessToken')?.value;
+
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers['Cookie'] = `accessToken=${token}`;
+    }
+  } else {
+    const token = document.cookie.replace(
+      /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
+      '$1'
+    );
+
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
+
+  return config;
+});
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {

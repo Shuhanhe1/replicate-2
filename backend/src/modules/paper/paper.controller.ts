@@ -1,9 +1,20 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { Roles } from '../../common/decorators/roles.decorator';
 import { PaperService } from './paper.service';
 import { ParsePaperDto } from './paper.dto';
 import { PrismaService } from '../database/prisma.service';
 import { PaginationQueryDto } from 'src/common/dto/pagination.dto';
 import { formatPagination } from 'src/common/utils/formatPrismaPagination';
+import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
+import { UserRole } from '@prisma/client';
 
 @Controller('paper')
 export class PaperController {
@@ -13,6 +24,8 @@ export class PaperController {
   ) {}
 
   @Post('parse/pubmed')
+  @UseGuards(AccessTokenGuard)
+  @Roles(UserRole.ADMIN)
   async parsePubmed(@Body() body: ParsePaperDto) {
     return this.paperService.parsePubmed(body.pubmedId);
   }

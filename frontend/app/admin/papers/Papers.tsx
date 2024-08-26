@@ -1,3 +1,4 @@
+'use client';
 import { api } from '@/common/api';
 import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
