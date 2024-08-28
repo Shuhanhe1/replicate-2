@@ -33,3 +33,11 @@ services:
     # mount ssl certificates
     #volumes:
     #  - ./nginx/certs:/etc/nginx/certs
+  ngnix:
+    build: ./nginx/
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - 443:443
+      - 80:80
