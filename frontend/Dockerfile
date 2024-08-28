@@ -19,4 +19,5 @@ COPY --from=base /app/frontend/public ./public
 COPY --from=base /app/frontend/node_modules ./node_modules
 ENV NODE_ENV=production
 EXPOSE 3001
-CMD ["npm", "start", "-p", "3001"]
+ENV PORT=3001
+CMD ["npm", "start"]
