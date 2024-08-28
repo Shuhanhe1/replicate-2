@@ -1,5 +1,25 @@
 version: "3.8"
 services:
+  frontend:
+    build: ./frontend
+    restart: always #change if you don't want your container restarting
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 3001:3001
+    depends_on:
+      - backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always #change if you don't want your container restarting
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
   postgres:
     image: postgres:14-alpine
     ports:
