@@ -1,10 +1,10 @@
 FROM node:20-alpine AS base
 
 WORKDIR /app/frontend
-COPY package*.json ./
-COPY next.config.js ./
-COPY node_modules ./node_modules
-# RUN npm ci --verbose
+#COPY package*.json ./
+#COPY next.config.js ./
+#COPY node_modules ./node_modules
+RUN npm ci --verbose
 COPY . .
 RUN npm run build
 
