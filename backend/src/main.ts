@@ -15,7 +15,7 @@ async function bootstrap() {
       'Expires',
     ],
     methods: 'GET, HEAD, PUT, POST, DELETE, OPTIONS, PATCH',
-    origin: ['http://localhost:3001'],
+    origin: ['http://localhost:3001', 'https://replicate-eight.vercel.app/'],
     credentials: true,
   });
 
