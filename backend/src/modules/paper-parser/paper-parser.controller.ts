@@ -11,7 +11,7 @@ export class PaperParserController {
 
   @Get('pubmed/:id')
   async getPubmedPaper(@Param('id') id: string) {
-    const paperData = await this.pubmedService.get(id);
+    const paperData = await this.pubmedService.find(id);
 
     return this.paperParserService.parse({ paper: paperData });
   }

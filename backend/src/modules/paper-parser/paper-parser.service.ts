@@ -30,7 +30,18 @@ export class PaperParserService {
                 }
               as for instructions and methodologies do not include it's number
               return only json format.
-              if no data for some experiment item field return null
+              if no data for string field or not specified return null, if not data for array field return empty array.
+              Authors are listed here: {
+                ...
+                "name_0": "surname:Gehring;given-names:Tiago V.",
+                "name_1": "surname:Luksys;given-names:Gediminas",
+                "name_2": "surname:Sandi;given-names:Carmen",
+                "name_3": "surname:Vasilaki;given-names:Eleni",
+                "section_type": "TITLE",
+                ...
+              }
+              Author should be formatted this way: "Given-name Surname'
+              Try to figure out the experiment item supplier, often times the supplier is just the ( XXX) next to the name of the item, but if can't then null
             Paper: ${JSON.stringify(payload.paper)}
             `,
     });

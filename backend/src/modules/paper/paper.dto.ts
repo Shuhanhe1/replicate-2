@@ -1,6 +1,11 @@
 import { IsString } from 'class-validator';
 
-export class ParsePaperDto {
+export class ParseSinglePubmedPaperDto {
   @IsString()
   pubmedId: string;
+}
+
+export class ParseBulkPubmedPapersDto {
+  @IsString()
+  search: string;
 }

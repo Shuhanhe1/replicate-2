@@ -15,7 +15,7 @@ export const Papers: FC = () => {
   const handleImportFromPubmed = async () => {
     try {
       setIsImporting(true);
-      const { data } = await api.post('paper/parse/pubmed', {
+      const { data } = await api.post('paper/parse/single/pubmed', {
         pubmedId,
       });
 

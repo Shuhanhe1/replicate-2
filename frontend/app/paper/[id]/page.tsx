@@ -33,6 +33,8 @@ export const generateMetadata = async ({
 const PaperPage: FC<PaperPageProps> = async ({ params }) => {
   const paper = await getPaper(params.id);
 
+  console.log(JSON.stringify(paper.experiments, null, 2));
+
   return (
     <Container className='mt-8' tag='article'>
       <div className='flex justify-between gap-4'>
@@ -95,7 +97,7 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
                       },
                       {
                         title: 'Material Usage',
-                        key: 'material_usage',
+                        key: 'usage',
                         className: 'w-6/12',
                       },
                       {
