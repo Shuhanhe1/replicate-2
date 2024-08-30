@@ -85,7 +85,7 @@ export class PaperController {
 
     let slug = paperData.title
       .replace(/ /g, '-')
-      .replace(/[^a-zA-Z0-9_]/g, '')
+      .replace(/[^a-zA-Z0-9-]/g, '')
       .toLowerCase();
 
     const existingPapersWithSlug = await this.prismaService.paper.findMany({
