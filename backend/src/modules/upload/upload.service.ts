@@ -16,7 +16,7 @@ export class UploadService {
     const id = `${crypto.randomBytes(8).toString('hex')}_${Date.now()}`;
     const [name, ext] = params.filename.split('.');
     const finalName = name
-      .replace(/ /g, '_')
+      .replace(/ /g, '-')
       .replace(/[^a-zA-Z0-9_]/g, '')
       .slice(0, 15)
       .toLowerCase();

@@ -1,5 +1,6 @@
 export interface Paper {
-  id: number;
+  id: string;
+  slug: string;
   title: string;
   pubmedId: string;
   tags: string[];

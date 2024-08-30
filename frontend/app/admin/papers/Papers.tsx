@@ -10,7 +10,7 @@ export const Papers: FC = () => {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [pubmedId, setPubmedId] = useState('');
   const [isImporting, setIsImporting] = useState(false);
-  const [importedId, setImportedId] = useState(null);
+  const [importedSlug, setImportedSlug] = useState(null);
 
   const handleImportFromPubmed = async () => {
     try {
@@ -19,16 +19,16 @@ export const Papers: FC = () => {
         pubmedId,
       });
 
-      setImportedId(data.id);
+      setImportedSlug(data.slug);
     } finally {
       setIsImporting(false);
     }
   };
 
   const renderContent = () => {
-    if (importedId) {
+    if (importedSlug) {
       return (
-        <Link href={`/paper/${importedId}`}>
+        <Link href={`/paper/${importedSlug}`}>
           <Button>Go to paper</Button>
         </Link>
       );

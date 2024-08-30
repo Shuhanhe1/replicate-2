@@ -14,14 +14,14 @@ import { createBackendUrl } from '@/common/utils/createBackendUrl';
 
 export interface PaperPageProps {
   params: {
-    id: string;
+    slug: string;
   };
 }
 
 const getPaper = cache(
-  async (id: number | string): Promise<PaperDetailed | null> => {
+  async (slug: number | string): Promise<PaperDetailed | null> => {
     try {
-      const response = await api.get(`/paper/${id}`);
+      const response = await api.get(`/paper/${slug}`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -33,7 +33,7 @@ const getPaper = cache(
 export const generateMetadata = async ({
   params,
 }: PaperPageProps): Promise<Metadata> => {
-  const paper = await getPaper(params.id);
+  const paper = await getPaper(params.slug);
   return {
     title: `${paper?.title || 'Paper not found'} - Conduct Science`,
     // description: `${paper.instructions ? paper.instructions.join('\n') : paper.title} page`,
@@ -41,7 +41,7 @@ export const generateMetadata = async ({
 };
 
 const PaperPage: FC<PaperPageProps> = async ({ params }) => {
-  const paper = await getPaper(params.id);
+  const paper = await getPaper(params.slug);
 
   if (!paper) {
     return <Container className='mt-8'>Not found</Container>;

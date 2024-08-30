@@ -60,6 +60,7 @@ model Experiment {
 
 model Paper {
   id          String   @id @default(uuid())
+  slug        String   @unique
   title       String
   authors     String[]
   tags        String[]

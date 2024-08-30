@@ -74,7 +74,7 @@ export class PaperController {
     }
 
     const image = await this.openaiService.generateImage({
-      prompt: `Make preview picture for the paper titled: ${paperData.title}
+      prompt: `Make image for the paper titled: ${paperData.title}
       Image must be realistic, professional, scientific and simple.
       Image mustn't include any text.`,
     });
@@ -83,8 +83,24 @@ export class PaperController {
       filename: `${paperData.title}.png`,
     });
 
+    let slug = paperData.title
+      .replace(/ /g, '-')
+      .replace(/[^a-zA-Z0-9_]/g, '')
+      .toLowerCase();
+
+    const existingPapersWithSlug = await this.prismaService.paper.findMany({
+      where: {
+        slug: { contains: slug },
+      },
+    });
+
+    if (existingPapersWithSlug.length) {
+      slug = `${slug}-${existingPapersWithSlug.length}`;
+    }
+
     return this.prismaService.paper.create({
       data: {
+        slug,
         title: paperData.title,
         pubmedId,
         authors: paperData.authors,
@@ -132,11 +148,11 @@ export class PaperController {
     
   } */
 
-  @Get(':id')
-  async getPaper(@Param('id') id: string) {
+  @Get(':slug')
+  async getPaper(@Param('slug') slug: string) {
     const paper = await this.prismaService.paper.findUnique({
       where: {
-        id,
+        slug,
       },
       include: {
         experiments: {

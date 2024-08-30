@@ -14,7 +14,7 @@ const Home = async () => {
       <Title>Papers</Title>
       <div className='mt-6 flex flex-col gap-8'>
         {data.data.map((paper) => (
-          <Link key={paper.id} href={`paper/${paper.id}`}>
+          <Link key={paper.id} href={`paper/${paper.slug}`}>
             <Card tag='article'>
               <Title size='sm' level={2}>
                 {paper.title}
