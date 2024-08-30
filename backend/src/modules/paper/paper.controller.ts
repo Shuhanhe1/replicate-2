@@ -74,8 +74,8 @@ export class PaperController {
     }
 
     const image = await this.openaiService.generateImage({
-      prompt: `Make preview for the paper titled: ${paperData.title}
-      Image must be professional, scientific and simple.
+      prompt: `Make preview picture for the paper titled: ${paperData.title}
+      Image must be realistic, professional, scientific and simple.
       Image mustn't include any text.`,
     });
 
