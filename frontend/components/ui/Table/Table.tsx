@@ -12,6 +12,7 @@ export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
     title: string;
     key: string;
     className?: string;
+    defaultValue?: string;
   }[];
   dataSource?: Record<string, any>[];
 }
@@ -33,7 +34,7 @@ export const Table: FC<TableProps> = ({ columns, dataSource, ...rest }) => {
           <TableRow key={data.id}>
             {columns?.map((column) => (
               <TableCell key={column.key} className={column.className}>
-                {data[column.key]}
+                {data[column.key] || column.defaultValue}
               </TableCell>
             ))}
           </TableRow>

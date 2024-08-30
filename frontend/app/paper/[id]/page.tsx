@@ -8,6 +8,9 @@ import Image from 'next/image';
 import { Card } from '@/components/ui/Card';
 import { cx } from 'class-variance-authority';
 import { Table } from '@/components/ui/Table';
+import Link from 'next/link';
+import { createPubmedUrl } from '@/common/utils/createPubmedUrl';
+import { createBackendUrl } from '@/common/utils/createBackendUrl';
 
 export interface PaperPageProps {
   params: {
@@ -15,17 +18,24 @@ export interface PaperPageProps {
   };
 }
 
-const getPaper = cache(async (id: number | string): Promise<PaperDetailed> => {
-  const response = await api.get(`/paper/${id}`);
-  return response.data;
-});
+const getPaper = cache(
+  async (id: number | string): Promise<PaperDetailed | null> => {
+    try {
+      const response = await api.get(`/paper/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+);
 
 export const generateMetadata = async ({
   params,
 }: PaperPageProps): Promise<Metadata> => {
   const paper = await getPaper(params.id);
   return {
-    title: `${paper.title} - Conduct Science`,
+    title: `${paper?.title || 'Paper not found'} - Conduct Science`,
     // description: `${paper.instructions ? paper.instructions.join('\n') : paper.title} page`,
   };
 };
@@ -33,20 +43,27 @@ export const generateMetadata = async ({
 const PaperPage: FC<PaperPageProps> = async ({ params }) => {
   const paper = await getPaper(params.id);
 
-  console.log(JSON.stringify(paper.experiments, null, 2));
+  if (!paper) {
+    return <Container className='mt-8'>Not found</Container>;
+  }
 
   return (
     <Container className='mt-8' tag='article'>
       <div className='flex justify-between gap-4'>
         <div className='w-full md:w-7/12'>
-          <Title size='md' uppercase>
+          <Title className='mb-2' size='md' uppercase>
             {paper.title}
           </Title>
+          <Link target='_blank' href={createPubmedUrl(`/${paper.pubmedId}`)}>
+            <span className='rounded-md text-primary-900'>
+              PMID: {paper.pubmedId}
+            </span>
+          </Link>
           {/* <Flex gap='sm' className='mt-10'>
           <Rate defaultValue={4} allowHalf />
           <span>4 from 19 votes</span>
         </Flex> */}
-          <div className='mt-4 flex flex-col gap-4'>
+          <div className='mt-2 flex flex-col gap-4'>
             <div className='mt-3 flex flex-wrap gap-2'>
               {paper.tags?.map((tag) => (
                 <span
@@ -73,7 +90,12 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
             </div>
           </div>
         </div>
-        <Image src='/images/lab.jpg' alt='lab' width={500} height={500} />
+        <Image
+          src={paper.image ? createBackendUrl(paper.image) : '/images/lab.jpg'}
+          alt='lab'
+          width={400}
+          height={400}
+        />
       </div>
       <div className='mt-8'>
         <Title size='md' uppercase level={2}>
@@ -93,16 +115,19 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
                       {
                         title: 'Material',
                         key: 'material',
+                        defaultValue: 'N/A',
                         className: 'w-2/12',
                       },
                       {
                         title: 'Material Usage',
                         key: 'usage',
+                        defaultValue: 'N/A',
                         className: 'w-6/12',
                       },
                       {
                         title: 'Supplier',
                         key: 'supplier',
+                        defaultValue: 'N/A',
                         className: 'w-4/12',
                       },
                     ]}
