@@ -83,7 +83,9 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
                 {paper.authors?.length
                   ? paper.authors?.map((author, index) => (
                       <Link
-                        href={createPubmedUrl(author.replace(/ /g, '+'))}
+                        href={createPubmedUrl(
+                          `/?term=${author.replace(/ /g, '+')}`
+                        )}
                         key={author}
                         className='text-gray-600'
                       >
