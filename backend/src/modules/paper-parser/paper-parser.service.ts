@@ -8,7 +8,7 @@ export class PaperParserService {
 
   public async parse(payload: { paper: any }): Promise<ParsedPaper> {
     const output = await this.openaiService.createCompetition({
-      content: `you're a neural system used to extract and form instructions and methodologies to help researcher do an experiment from a given paper and form it in a JSON file.
+      content: `you're a neural system used to extract and form instructions and methodologies to help researcher do an experiment from a given paper and form it in a valid JSON format.
                 the output should be in this structure:
                 {
                   "title": "Paper title",

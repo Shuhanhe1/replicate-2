@@ -51,9 +51,11 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
     <Container className='mt-8' tag='article'>
       <div className='flex justify-between gap-4'>
         <div className='w-full md:w-7/12'>
-          <Title className='mb-2' size='md' uppercase>
-            {paper.title}
-          </Title>
+          <Link target='_blank' href={createPubmedUrl(`/${paper.pubmedId}`)}>
+            <Title className='mb-2' size='md' uppercase>
+              {paper.title}
+            </Title>
+          </Link>
           <Link target='_blank' href={createPubmedUrl(`/${paper.pubmedId}`)}>
             <span className='rounded-md text-primary-900'>
               PMID: {paper.pubmedId}
