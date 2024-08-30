@@ -8,7 +8,7 @@ export class PaperParserService {
 
   public async parse(payload: { paper: any }): Promise<ParsedPaper> {
     const output = await this.openaiService.createCompetition({
-      content: `you're an ner system used to extract and form instructions and methodolgies to help researcher do an experiment from a given paper and form it in a JSON file.
+      content: `you're a neural system used to extract and form instructions and methodologies to help researcher do an experiment from a given paper and form it in a JSON file.
                 the output should be in this structure:
                 {
                   "title": "Paper title",
@@ -30,7 +30,7 @@ export class PaperParserService {
                 }
               as for instructions and methodologies do not include it's number
               return only json format.
-              if no data for string field or not specified return null, if not data for array field return empty array.
+              if no data for string field or not specified return null, if no data for array field return empty array.
               Authors are listed here: {
                 ...
                 "name_0": "surname:Gehring;given-names:Tiago V.",
@@ -41,7 +41,7 @@ export class PaperParserService {
                 ...
               }
               Author should be formatted this way: "Given-name Surname'
-              Try to figure out the experiment item supplier, often times the supplier is just the ( XXX) next to the name of the item, but if can't then null
+              There is a general rule in paper that an experiment item and its description is then supplied with word FROM (location)FROM(location) is the supplier).
             Paper: ${JSON.stringify(payload.paper)}
             `,
     });

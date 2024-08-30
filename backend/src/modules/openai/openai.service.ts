@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 import { OpenAI } from 'openai';
 
 @Injectable()
@@ -50,5 +51,28 @@ export class OpenaiService {
     }
 
     return output;
+  }
+
+  public async generateImage(
+    params: OpenAI.Images.ImageGenerateParams,
+  ): Promise<Buffer> {
+    const {
+      model = 'dall-e-3',
+      n = 1,
+      size = '1024x1024',
+      ...restParams
+    } = params;
+    const response = await this.openai.images.generate({
+      model,
+      n,
+      size,
+      ...restParams,
+    });
+
+    const arrayBuffer = await axios.get(response.data[0].url, {
+      responseType: 'arraybuffer',
+    });
+
+    return Buffer.from(arrayBuffer.data, 'binary');
   }
 }

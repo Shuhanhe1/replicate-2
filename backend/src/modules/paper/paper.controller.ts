@@ -4,13 +4,13 @@ import {
   Controller,
   Get,
   InternalServerErrorException,
+  NotFoundException,
   Param,
   Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { PaperService } from './paper.service';
 import { ParseSinglePubmedPaperDto } from './paper.dto';
 import { PrismaService } from '../database/prisma.service';
 import { PaginationQueryDto } from 'src/common/dto/pagination.dto';
@@ -20,14 +20,17 @@ import { UserRole } from '@prisma/client';
 import { PaperParserService } from '../paper-parser/paper-parser.service';
 import { ParsedPaper } from '../paper-parser/types/parsed-paper.type';
 import { PubmedService } from '../pubmed/pubmed.service';
+import { OpenaiService } from '../openai/openai.service';
+import { UploadService } from '../upload/upload.service';
 
 @Controller('paper')
 export class PaperController {
   constructor(
-    private readonly paperService: PaperService,
     private readonly prismaService: PrismaService,
     private readonly paperParserService: PaperParserService,
     private readonly pubmedService: PubmedService,
+    private readonly openaiService: OpenaiService,
+    private readonly uploadService: UploadService,
   ) {}
 
   @Post('parse/single/pubmed')
@@ -70,11 +73,22 @@ export class PaperController {
       throw new InternalServerErrorException('Error validating the paper data');
     }
 
+    const image = await this.openaiService.generateImage({
+      prompt: `Make preview for the paper titled: ${paperData.title}
+      Image should be realistic.
+      Do not include any text`,
+    });
+
+    const uploadedImage = await this.uploadService.uploadFile(image, {
+      filename: `${paperData.title}.png`,
+    });
+
     return this.prismaService.paper.create({
       data: {
         title: paperData.title,
         pubmedId,
         authors: paperData.authors,
+        image: uploadedImage.path,
         tags: paperData.tags,
         experiments: {
           create: paperData.experiments.map((experiment) => ({
@@ -120,7 +134,7 @@ export class PaperController {
 
   @Get(':id')
   async getPaper(@Param('id') id: string) {
-    return this.prismaService.paper.findUnique({
+    const paper = await this.prismaService.paper.findUnique({
       where: {
         id,
       },
@@ -134,6 +148,10 @@ export class PaperController {
         },
       },
     });
+
+    if (!paper) throw new NotFoundException('Paper not found');
+
+    return paper;
   }
 
   @Get()
