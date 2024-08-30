@@ -68,12 +68,14 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
           <div className='mt-2 flex flex-col gap-4'>
             <div className='mt-3 flex flex-wrap gap-2'>
               {paper.tags?.map((tag) => (
-                <span
+                <Link
                   key={tag}
+                  href={createPubmedUrl(`/?term=${tag.replace(/ /g, '+')}`)}
+                  target='_blank'
                   className='rounded-md bg-primary-100 px-2 py-1 text-primary-900'
                 >
                   {tag}
-                </span>
+                </Link>
               ))}
             </div>
             <div className='text-lg'>
@@ -86,8 +88,9 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
                         href={createPubmedUrl(
                           `/?term=${author.replace(/ /g, '+')}`
                         )}
+                        target='_blank'
                         key={author}
-                        className='text-gray-600'
+                        className='text-primary-900'
                       >
                         {author}
                         {index !== (paper.authors?.length || 0) - 1 && ', '}
