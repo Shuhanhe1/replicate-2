@@ -75,8 +75,8 @@ export class PaperController {
 
     const image = await this.openaiService.generateImage({
       prompt: `Make preview for the paper titled: ${paperData.title}
-      Image should be realistic.
-      Do not include any text`,
+      Image must be professional, scientific and simple.
+      Image mustn't include any text.`,
     });
 
     const uploadedImage = await this.uploadService.uploadFile(image, {
