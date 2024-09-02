@@ -1,0 +1,5 @@
+DELETE FROM public."Instruction" WHERE id NOT IN ('2536466f-38d0-4e81-acda-2e411fdb3030');
+DELETE FROM public."Methodology" WHERE id NOT IN ('2536466f-38d0-4e81-acda-2e411fdb3030');
+DELETE FROM public."ExperimentItem" WHERE id NOT IN ('2536466f-38d0-4e81-acda-2e411fdb3030');
+DELETE FROM public."Experiment" WHERE id NOT IN ('2536466f-38d0-4e81-acda-2e411fdb3030');
+DELETE FROM public."Paper" WHERE id NOT IN ('2536466f-38d0-4e81-acda-2e411fdb3030');

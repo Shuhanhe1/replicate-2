@@ -1,4 +1,4 @@
-import { api } from '@/common/api';
+import { api, pubmedApi } from '@/common/api';
 import { Paper, PaperDetailed } from '@/common/types/paper.types';
 import { Metadata } from 'next';
 import { FC, cache } from 'react';
@@ -11,6 +11,7 @@ import { Table } from '@/components/ui/Table';
 import Link from 'next/link';
 import { createPubmedUrl } from '@/common/utils/createPubmedUrl';
 import { createBackendUrl } from '@/common/utils/createBackendUrl';
+import { CustomLink } from '@/components/ui/CustomLink';
 
 export interface PaperPageProps {
   params: {
@@ -42,6 +43,9 @@ export const generateMetadata = async ({
 
 const PaperPage: FC<PaperPageProps> = async ({ params }) => {
   const paper = await getPaper(params.slug);
+  const totalCitations = paper
+    ? await pubmedApi.getCitationsNumber(paper.pubmedId)
+    : null;
 
   if (!paper) {
     return <Container className='mt-8'>Not found</Container>;
@@ -49,7 +53,17 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
 
   return (
     <Container className='mt-8' tag='article'>
-      <div className='flex justify-between gap-4'>
+      <div>
+        <CustomLink
+          target='_blank'
+          href={createPubmedUrl(
+            `/?linkname=pubmed_pubmed_citedin&from_uid=${paper.pubmedId}`
+          )}
+        >
+          Citations: {totalCitations || 0}
+        </CustomLink>
+      </div>
+      <div className='flex flex-col justify-between gap-2 md:flex-row md:gap-4'>
         <div className='w-full md:w-7/12'>
           <Link target='_blank' href={createPubmedUrl(`/${paper.pubmedId}`)}>
             <Title className='mb-2' size='md' uppercase>
@@ -101,12 +115,15 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
             </div>
           </div>
         </div>
-        <Image
-          src={paper.image ? createBackendUrl(paper.image) : '/images/lab.jpg'}
-          alt='lab'
-          width={400}
-          height={400}
-        />
+        <div>
+          <Image
+            // src={paper.image ? createBackendUrl(paper.image) : '/images/lab.jpg'}
+            src='/images/lab.jpg'
+            alt='lab'
+            width={400}
+            height={300}
+          />
+        </div>
       </div>
       <div className='mt-8'>
         <Title size='md' uppercase level={2}>

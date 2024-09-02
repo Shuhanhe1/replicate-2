@@ -25,8 +25,9 @@ export class PubmedService {
     $('span.docsum-pmid').each((index, element) => {
       papers.push({ id: $(element).text() });
     });
-    // number is incorrect
-    const total = Number($('.results-amount .value').text().replace(/,/g, ''));
+    const total = Number(
+      $('.results-amount .value').first().text().replace(/,/g, ''),
+    );
 
     return { data: papers, pagination: { total } };
   }

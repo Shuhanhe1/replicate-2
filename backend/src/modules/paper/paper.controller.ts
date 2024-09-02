@@ -73,15 +73,15 @@ export class PaperController {
       throw new InternalServerErrorException('Error validating the paper data');
     }
 
-    const image = await this.openaiService.generateImage({
+    /* const image = await this.openaiService.generateImage({
       prompt: `Make image for the paper titled: ${paperData.title}
       Image must be realistic, professional, scientific and simple.
       Image mustn't include any text.`,
-    });
+    }); */
 
-    const uploadedImage = await this.uploadService.uploadFile(image, {
+    /* const uploadedImage = await this.uploadService.uploadFile(image, {
       filename: `${paperData.title}.png`,
-    });
+    }); */
 
     let slug = paperData.title
       .replace(/ /g, '-')
@@ -104,7 +104,7 @@ export class PaperController {
         title: paperData.title,
         pubmedId,
         authors: paperData.authors,
-        image: uploadedImage.path,
+        // image: uploadedImage.path,
         tags: paperData.tags,
         experiments: {
           create: paperData.experiments.map((experiment) => ({
