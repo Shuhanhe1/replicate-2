@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import { Menu } from '@/components/common/Menu';
 import { Footer } from '@/components/common/Footer';
@@ -31,6 +32,7 @@ export default function RootLayout({
         <div id='portal'></div>
         <Toaster />
       </body>
+      <GoogleAnalytics gaId='GTM-PDXDZ33J' />
     </html>
   );
 }
