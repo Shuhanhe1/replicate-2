@@ -41,4 +41,4 @@ services:
       - backend
     ports:
       - 443:443
-      - 80:80
+      - 8443:8443
