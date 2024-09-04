@@ -35,9 +35,27 @@ export const generateMetadata = async ({
   params,
 }: PaperPageProps): Promise<Metadata> => {
   const paper = await getPaper(params.slug);
+
+  let description = '';
+
+  if (paper) {
+    description = 'Experiments: ';
+    for (const experiment of paper.experiments) {
+      description += experiment.title;
+      description += 'Methodologies: ';
+      description += experiment.methodologies
+        .map((methodology) => methodology.text)
+        .join(' ');
+    }
+  }
   return {
     title: `${paper?.title || 'Paper not found'} - Conduct Science`,
-    // description: `${paper.instructions ? paper.instructions.join('\n') : paper.title} page`,
+    description: paper
+      ? paper.experiments
+          .map((experiment) => experiment.methodologies)
+          .flat()
+          .join(' ')
+      : '',
   };
 };
 

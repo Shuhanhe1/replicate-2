@@ -3,7 +3,8 @@ import { cx } from 'class-variance-authority';
 import { Title } from '@/components/ui/Title';
 import { Anchor } from '@/components/ui/Anchor';
 
-export interface FooterColumnProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface FooterColumnProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   title: string;
   marker?: boolean;
   items?: {
@@ -12,10 +13,17 @@ export interface FooterColumnProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   }[];
 }
 
-export const FooterColumn: FC<FooterColumnProps> = ({ title, items, marker, ...rest }) => {
+export const FooterColumn: FC<FooterColumnProps> = ({
+  title,
+  items,
+  marker,
+  ...rest
+}) => {
   return (
     <div {...rest}>
-      <Title size='xxs'>{title}</Title>
+      <Title size='xxs' level={2}>
+        {title}
+      </Title>
       <ul className='mt-6 flex flex-col gap-3'>
         {items?.map((item, index) => (
           <li
@@ -24,7 +32,11 @@ export const FooterColumn: FC<FooterColumnProps> = ({ title, items, marker, ...r
               'list-inside list-disc': marker,
             })}
           >
-            {item.link ? <Anchor href={item.link}>{item.title}</Anchor> : item.title}
+            {item.link ? (
+              <Anchor href={item.link}>{item.title}</Anchor>
+            ) : (
+              item.title
+            )}
           </li>
         ))}
       </ul>
