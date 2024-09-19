@@ -33,6 +33,7 @@ export const Papers: FC = () => {
         description:
           'Paper imported has started. Wait a few minutes for it to finish',
       });
+      setIsImportModalOpen(false);
     } finally {
       setIsImporting(false);
     }
