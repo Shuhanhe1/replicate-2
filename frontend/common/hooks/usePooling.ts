@@ -15,8 +15,6 @@ export const usePolling = (
   const lastPollTimeRef = useRef<number>(0);
   const isPageVisible = usePageVisibility();
 
-  console.log('isPageVisible', isPageVisible);
-
   useEffect(() => {
     if (disabled) return;
     const pollNotifications = async () => {
@@ -25,7 +23,6 @@ export const usePolling = (
     };
 
     const startPolling = () => {
-      console.log('startPolling');
       pollNotifications();
       timerIdRef.current = setInterval(pollNotifications, interval);
     };
@@ -36,14 +33,12 @@ export const usePolling = (
     };
 
     if (isPageVisible) {
-      console.log('isPageVisible', isPageVisible);
       if (Date.now() - lastPollTimeRef.current < interval) return;
       startPolling();
     } else stopPolling();
 
-    // return () => {
-    //   console.log('stopPolling');
-    //   stopPolling();
-    // };
+    return () => {
+      stopPolling();
+    };
   }, [isPageVisible, disabled, interval, fn]);
 };
