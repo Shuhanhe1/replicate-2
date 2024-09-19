@@ -2,46 +2,43 @@
 import { api } from '@/common/api';
 import { paperApi } from '@/common/api/paper.api';
 import { usePaginated } from '@/common/hooks';
+import { usePolling } from '@/common/hooks/usePooling';
 import { Paper } from '@/common/types';
+import { toast } from '@/components/shadcn/ui/use-toast';
 import { Button } from '@/components/ui/Button';
 import { CustomLink } from '@/components/ui/CustomLink';
 import { Field } from '@/components/ui/Field';
 import { Modal } from '@/components/ui/Modal/Modal';
-import { Table, TableProps } from '@/components/ui/Table';
-import Link from 'next/link';
-import { FC, useEffect, useState } from 'react';
+import { Table } from '@/components/ui/Table';
+import { FC, useState } from 'react';
 
 export const Papers: FC = () => {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [pubmedId, setPubmedId] = useState('');
   const [isImporting, setIsImporting] = useState(false);
-  const [importedSlug, setImportedSlug] = useState(null);
   const [page, setPage] = useState(1);
   const paginated = usePaginated<Paper>(paperApi.getAll, { page });
+  usePolling(paginated.refetch, {
+    interval: 10000,
+  });
 
   const handleImportFromPubmed = async () => {
     try {
       setIsImporting(true);
-      const { data } = await api.post('paper/parse/single/pubmed', {
+      await api.post('paper/parse/single/pubmed', {
         pubmedId,
       });
-      await paginated.refetch();
-
-      setImportedSlug(data.slug);
+      toast({
+        title: 'Success',
+        description:
+          'Paper imported has started. Wait a few minutes for it to finish',
+      });
     } finally {
       setIsImporting(false);
     }
   };
 
   const renderContent = () => {
-    if (importedSlug) {
-      return (
-        <Link href={`/paper/${importedSlug}`}>
-          <Button>Go to paper</Button>
-        </Link>
-      );
-    }
-
     return (
       <>
         <Field

@@ -23,7 +23,7 @@ export const usePaginated = <T>(
 
   useEffect(() => {
     fetch();
-  }, [pagination]);
+  }, [pagination.page]);
 
   return { ...data, refetch: fetch };
 };
