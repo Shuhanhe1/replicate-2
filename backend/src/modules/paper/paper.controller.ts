@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   InternalServerErrorException,
   NotFoundException,
@@ -22,6 +23,7 @@ import { ParsedPaper } from '../paper-parser/types/parsed-paper.type';
 import { PubmedService } from '../pubmed/pubmed.service';
 import { OpenaiService } from '../openai/openai.service';
 import { UploadService } from '../upload/upload.service';
+import { ConductscienceSdkService } from '../conductscienceSdk/conductscienceSdk.service';
 
 @Controller('paper')
 export class PaperController {
@@ -31,6 +33,7 @@ export class PaperController {
     private readonly pubmedService: PubmedService,
     private readonly openaiService: OpenaiService,
     private readonly uploadService: UploadService,
+    private readonly conductscienceSdkService: ConductscienceSdkService,
   ) {}
 
   @Post('parse/single/pubmed')
@@ -98,6 +101,61 @@ export class PaperController {
       slug = `${slug}-${existingPapersWithSlug.length}`;
     }
 
+    const experiments = [];
+
+    for (const experiment of paperData.experiments) {
+      const items = [];
+      const methodologies = [];
+      const instructions = [];
+
+      for (const item of experiment.items) {
+        let url;
+
+        try {
+          const data = await this.conductscienceSdkService.products.getByTitle({
+            title: item.material,
+          });
+          if (data.length) {
+            url = data[0].link;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+
+        items.push({
+          material: item.material,
+          supplier: item.supplier,
+          usage: item.usage,
+          ...(url && { url }),
+        });
+      }
+
+      for (const methodology of experiment.methodologies) {
+        methodologies.push({
+          text: methodology.text,
+        });
+      }
+
+      for (const instruction of experiment.instructions) {
+        instructions.push({
+          text: instruction.text,
+        });
+      }
+
+      experiments.push({
+        title: experiment.title,
+        items: {
+          create: items,
+        },
+        methodologies: {
+          create: methodologies,
+        },
+        instructions: {
+          create: instructions,
+        },
+      });
+    }
+
     return this.prismaService.paper.create({
       data: {
         slug,
@@ -107,26 +165,7 @@ export class PaperController {
         // image: uploadedImage.path,
         tags: paperData.tags,
         experiments: {
-          create: paperData.experiments.map((experiment) => ({
-            title: experiment.title,
-            items: {
-              create: experiment.items.map((item) => ({
-                material: item.material,
-                supplier: item.supplier,
-                usage: item.usage,
-              })),
-            },
-            methodologies: {
-              create: experiment.methodologies.map((methodology) => ({
-                text: methodology.text,
-              })),
-            },
-            instructions: {
-              create: experiment.instructions.map((instruction) => ({
-                text: instruction.text,
-              })),
-            },
-          })),
+          create: experiments,
         },
       },
       include: {
@@ -196,5 +235,26 @@ export class PaperController {
         total: count,
       },
     };
+  }
+
+  @Delete(':slug')
+  @UseGuards(AccessTokenGuard)
+  @Roles(UserRole.ADMIN)
+  async deletePaper(@Param('slug') slug: string) {
+    const paper = await this.prismaService.paper.findUnique({
+      where: {
+        slug,
+      },
+    });
+
+    if (!paper) throw new NotFoundException('Paper not found');
+
+    await this.prismaService.paper.delete({
+      where: {
+        id: paper.id,
+      },
+    });
+
+    return paper;
   }
 }

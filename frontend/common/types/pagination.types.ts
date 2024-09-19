@@ -1,3 +1,7 @@
+export interface PaginationQuery {
+  page: number;
+}
+
 export interface Pagination {
   total: number;
   page: number;

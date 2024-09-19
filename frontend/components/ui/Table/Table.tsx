@@ -6,6 +6,7 @@ import {
   TableRow,
 } from '@/components/shadcn/ui/table';
 import { FC } from 'react';
+import { Pagination, PaginationProps } from '../Pagination';
 
 export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   columns?: {
@@ -15,31 +16,40 @@ export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
     defaultValue?: string;
   }[];
   dataSource?: Record<string, any>[];
+  pagination?: PaginationProps;
 }
 
-export const Table: FC<TableProps> = ({ columns, dataSource, ...rest }) => {
+export const Table: FC<TableProps> = ({
+  columns,
+  dataSource,
+  pagination,
+  ...rest
+}) => {
   return (
-    <TableBase {...rest}>
-      <TableHeader>
-        <TableRow>
-          {columns?.map((column) => (
-            <TableCell key={column.title} className={column.className}>
-              {column.title}
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {dataSource?.map((data) => (
-          <TableRow key={data.id}>
+    <div>
+      <TableBase {...rest}>
+        <TableHeader>
+          <TableRow>
             {columns?.map((column) => (
-              <TableCell key={column.key} className={column.className}>
-                {data[column.key] || column.defaultValue}
+              <TableCell key={column.title} className={column.className}>
+                {column.title}
               </TableCell>
             ))}
           </TableRow>
-        ))}
-      </TableBody>
-    </TableBase>
+        </TableHeader>
+        <TableBody>
+          {dataSource?.map((data) => (
+            <TableRow key={data.id}>
+              {columns?.map((column) => (
+                <TableCell key={column.key} className={column.className}>
+                  {data[column.key] || column.defaultValue}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </TableBase>
+      {pagination && <Pagination className='mt-2' {...pagination} />}
+    </div>
   );
 };

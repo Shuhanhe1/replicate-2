@@ -16,7 +16,7 @@ export class PaperParserService {
                   "authors": ["author1", "author2"],
                   "experiments": [
                     {
-                      "title": "Experiment title or number if title not specified (Experiment 1)",
+                      "title": "Experiment title",
                       "authors": ["author1", "author2"],
                       "tags": ["tag1", "tag2"],
                       "items": [

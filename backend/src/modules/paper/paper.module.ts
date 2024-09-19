@@ -6,6 +6,7 @@ import { PubmedModule } from '../pubmed/pubmed.module';
 import { PaperController } from './paper.controller';
 import { OpenaiModule } from '../openai/openai.module';
 import { UploadModule } from '../upload/upload.module';
+import { ConductscienceSdkModule } from '../conductscienceSdk/conductscienceSdk.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UploadModule } from '../upload/upload.module';
     PubmedModule,
     OpenaiModule,
     UploadModule,
+    ConductscienceSdkModule,
   ],
   providers: [PaperService],
   controllers: [PaperController],

@@ -12,6 +12,7 @@
     "@emotion/css": "^11.11.2",
     "@next/third-parties": "^14.2.7",
     "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@react-spring/web": "^9.7.3",

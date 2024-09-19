@@ -18,10 +18,11 @@ model ExperimentItem {
   material    String ?
   supplier    String ?
   usage       String ?
+  url         String ?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Experiment Experiment @relation(fields: [experimentId], references: [id])
+  Experiment Experiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
   experimentId String
 }
 
@@ -31,7 +32,7 @@ model Methodology {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Experiment Experiment @relation(fields: [experimentId], references: [id])
+  Experiment Experiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
   experimentId String
 }
 
@@ -41,7 +42,7 @@ model Instruction {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Experiment Experiment @relation(fields: [experimentId], references: [id])
+  Experiment Experiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
   experimentId String
 }
 
@@ -54,7 +55,7 @@ model Experiment {
   methodologies Methodology[]
   instructions Instruction[]
 
-  Paper Paper @relation(fields: [paperId], references: [id])
+  Paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
   paperId String
 }
 

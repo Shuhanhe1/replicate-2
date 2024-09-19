@@ -14,6 +14,7 @@ export interface PaperDetailed extends Paper {
       material: string;
       usage: string;
       supplier: string;
+      url?: string;
     }[];
     title: string;
     instructions: { text: string }[];

@@ -177,7 +177,17 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
                         className: 'w-4/12',
                       },
                     ]}
-                    dataSource={experiment.items}
+                    dataSource={experiment.items.map((item) => ({
+                      material: item.url ? (
+                        <CustomLink target='_blank' href={item.url}>
+                          {item.material}
+                        </CustomLink>
+                      ) : (
+                        item.material
+                      ),
+                      usage: item.usage,
+                      supplier: item.supplier,
+                    }))}
                   />
                 </div>
                 <div className='mt-4'>
