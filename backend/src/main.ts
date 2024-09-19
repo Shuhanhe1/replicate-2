@@ -15,7 +15,11 @@ async function bootstrap() {
       'Expires',
     ],
     methods: 'GET, HEAD, PUT, POST, DELETE, OPTIONS, PATCH',
-    origin: ['http://localhost:3001', 'http://20.119.84.53'],
+    origin: [
+      'http://localhost:3001',
+      'http://20.119.84.53',
+      'https://replicate.conductscience.com',
+    ],
     credentials: true,
   });
 
