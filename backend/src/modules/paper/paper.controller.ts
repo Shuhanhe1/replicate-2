@@ -93,6 +93,9 @@ export class PaperController {
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
       }),
       this.prismaService.paper.count(),
     ]);
