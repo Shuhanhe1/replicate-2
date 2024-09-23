@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { PaperParserService } from '../paper-parser/paper-parser.service';
 import { PubmedService } from '../pubmed/pubmed.service';
@@ -18,20 +14,7 @@ export class PaperService {
     private readonly conductscienceSdkService: ConductscienceSdkService,
   ) {}
 
-  async parsePaper(pubmedId) {
-    let pubmedData = await this.pubmedService.find(pubmedId);
-
-    try {
-      pubmedData = await this.paperParserService.parse({
-        paper: pubmedData,
-      });
-    } catch (error) {
-      console.error(error);
-      throw new BadRequestException(
-        'Not able to access the pubmed paper. Make sure that the pubmed id is correct and paper has open access.',
-      );
-    }
-
+  async parsePaper(pubmedId: string, pubmedData: ParsedPaper) {
     let paperData: ParsedPaper;
 
     try {

@@ -154,42 +154,44 @@ const PaperPage: FC<PaperPageProps> = async ({ params }) => {
                 <Title size='sm' level={3}>
                   {experiment.title}
                 </Title>
-                <div className='mt-4'>
-                  <span className='text-lg font-semibold'>Items</span>
-                  <Table
-                    columns={[
-                      {
-                        title: 'Material',
-                        key: 'material',
-                        defaultValue: 'N/A',
-                        className: 'w-2/12',
-                      },
-                      {
-                        title: 'Material Usage',
-                        key: 'usage',
-                        defaultValue: 'N/A',
-                        className: 'w-6/12',
-                      },
-                      {
-                        title: 'Supplier',
-                        key: 'supplier',
-                        defaultValue: 'N/A',
-                        className: 'w-4/12',
-                      },
-                    ]}
-                    dataSource={experiment.items.map((item) => ({
-                      material: item.url ? (
-                        <CustomLink target='_blank' href={item.url}>
-                          {item.material}
-                        </CustomLink>
-                      ) : (
-                        item.material
-                      ),
-                      usage: item.usage,
-                      supplier: item.supplier,
-                    }))}
-                  />
-                </div>
+                {experiment.items.length ? (
+                  <div className='mt-4'>
+                    <span className='text-lg font-semibold'>Items</span>
+                    <Table
+                      columns={[
+                        {
+                          title: 'Material',
+                          key: 'material',
+                          defaultValue: 'N/A',
+                          className: 'w-2/12',
+                        },
+                        {
+                          title: 'Material Usage',
+                          key: 'usage',
+                          defaultValue: 'N/A',
+                          className: 'w-6/12',
+                        },
+                        {
+                          title: 'Supplier',
+                          key: 'supplier',
+                          defaultValue: 'N/A',
+                          className: 'w-4/12',
+                        },
+                      ]}
+                      dataSource={experiment.items.map((item) => ({
+                        material: item.url ? (
+                          <CustomLink target='_blank' href={item.url}>
+                            {item.material}
+                          </CustomLink>
+                        ) : (
+                          item.material
+                        ),
+                        usage: item.usage,
+                        supplier: item.supplier,
+                      }))}
+                    />
+                  </div>
+                ) : null}
                 <div className='mt-4'>
                   <span className='text-lg font-semibold'>Instructions</span>
                   <ul className='ml-2 mt-2 flex flex-col gap-2'>

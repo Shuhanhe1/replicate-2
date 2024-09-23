@@ -18,12 +18,15 @@ import { formatPagination } from 'src/common/utils/formatPrismaPagination';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { UserRole } from '@prisma/client';
 import { PaperService } from './paper.service';
+import { PaperParserService } from '../paper-parser/paper-parser.service';
+import { ParsedPaper } from '../paper-parser/types/parsed-paper.type';
 
 @Controller('paper')
 export class PaperController {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly paperService: PaperService,
+    private readonly paperParserService: PaperParserService,
   ) {}
 
   @Post('parse/single/pubmed')
@@ -42,7 +45,20 @@ export class PaperController {
       throw new BadRequestException('Paper with this pubmed id already exists');
     }
 
-    this.paperService.parsePaper(pubmedId);
+    let pubmedData: ParsedPaper;
+
+    try {
+      pubmedData = await this.paperParserService.parse({
+        paper: pubmedData,
+      });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException(
+        'Not able to access the pubmed paper. Make sure that the pubmed id is correct and paper has open access.',
+      );
+    }
+
+    this.paperService.parsePaper(pubmedId, pubmedData);
 
     return {
       message: 'Job added to the queue',
