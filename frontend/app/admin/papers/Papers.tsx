@@ -31,7 +31,7 @@ export const Papers: FC = () => {
       toast({
         title: 'Success',
         description:
-          'Paper imported has started. Wait a few minutes for it to finish',
+          'Paper import has started. Wait a few minutes for it to finish',
       });
       setIsImportModalOpen(false);
     } finally {

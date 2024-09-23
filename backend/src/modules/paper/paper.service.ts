@@ -83,7 +83,7 @@ export class PaperService {
           const data = await this.conductscienceSdkService.products.getByTitle({
             title: item.material,
           });
-          if (data.length) {
+          if (data?.length) {
             const options = {
               includeScore: true,
               isCaseSensitive: false,
@@ -91,17 +91,20 @@ export class PaperService {
               keys: ['title'],
             };
 
-            const fuse = new Fuse(items, options);
+            const fuse = new Fuse(data, options);
 
             const result = fuse.search(item.material.replace(/-/g, ' '));
 
             const relevantItem =
               result[0]?.score < 0.3 ? result[0]?.item : null;
 
+            console.log(123, item.material, result);
+
             url = relevantItem?.link;
           }
         } catch (error) {
-          console.error(error);
+          if (!error) console.error('Error fetching product');
+          // console.error(error);
         }
 
         items.push({
