@@ -3,7 +3,6 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import Fuse from 'fuse.js';
 import { PrismaService } from '../database/prisma.service';
 import { PaperParserService } from '../paper-parser/paper-parser.service';
 import { PubmedService } from '../pubmed/pubmed.service';
@@ -81,30 +80,13 @@ export class PaperService {
 
         try {
           const data = await this.conductscienceSdkService.products.getByTitle({
-            title: item.material,
+            title: item.material.replace(/-/g, ' '),
           });
           if (data?.length) {
-            const options = {
-              includeScore: true,
-              isCaseSensitive: false,
-              // Search in `author` and in `tags` array
-              keys: ['title'],
-            };
-
-            const fuse = new Fuse(data, options);
-
-            const result = fuse.search(item.material.replace(/-/g, ' '));
-
-            const relevantItem =
-              result[0]?.score < 0.3 ? result[0]?.item : null;
-
-            console.log(123, item.material, result);
-
-            url = relevantItem?.link;
+            url = data[0]?.link;
           }
         } catch (error) {
-          if (!error) console.error('Error fetching product');
-          // console.error(error);
+          console.error(error);
         }
 
         items.push({
