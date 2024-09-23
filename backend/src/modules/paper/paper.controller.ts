@@ -18,15 +18,15 @@ import { formatPagination } from 'src/common/utils/formatPrismaPagination';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { UserRole } from '@prisma/client';
 import { PaperService } from './paper.service';
-import { PaperParserService } from '../paper-parser/paper-parser.service';
 import { ParsedPaper } from '../paper-parser/types/parsed-paper.type';
+import { PubmedService } from '../pubmed/pubmed.service';
 
 @Controller('paper')
 export class PaperController {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly paperService: PaperService,
-    private readonly paperParserService: PaperParserService,
+    private readonly pubmedService: PubmedService,
   ) {}
 
   @Post('parse/single/pubmed')
@@ -48,9 +48,7 @@ export class PaperController {
     let pubmedData: ParsedPaper;
 
     try {
-      pubmedData = await this.paperParserService.parse({
-        paper: pubmedData,
-      });
+      pubmedData = await this.pubmedService.find(pubmedId);
     } catch (error) {
       console.error(error);
       throw new BadRequestException(
