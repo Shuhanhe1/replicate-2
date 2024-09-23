@@ -94,7 +94,9 @@ export const Papers: FC = () => {
           paginated
             ? {
                 page,
-                total: paginated?.pagination.total,
+                total: Math.ceil(
+                  paginated.pagination.total / paginated.pagination.pageSize
+                ),
                 onChange: (page) => {
                   setPage(page);
                 },
