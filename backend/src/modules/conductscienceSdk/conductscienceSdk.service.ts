@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import * as MOCKED_PRODUCTS from './data-source/products-data-source.json';
+import { default as MOCKED_PRODUCTS } from './data-source/products-data-source.json';
 import { knexInstance } from 'src/common/setups';
+import { Product } from './types/product.types';
 
 @Injectable()
 export class ConductscienceSdkService {
@@ -17,7 +18,7 @@ export class ConductscienceSdkService {
   constructor(private readonly configService: ConfigService) {}
 
   products = {
-    getAll: async () => {
+    getAll: async (): Promise<Product[]> => {
       if (this.configService.get('NODE_ENV') === 'development') {
         return MOCKED_PRODUCTS;
       }

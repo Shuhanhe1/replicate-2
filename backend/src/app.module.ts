@@ -9,6 +9,7 @@ import { PrismaModule } from './modules/database/prisma.module';
 import { PaperModule } from './modules/paper/paper.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UserModule } from './modules/user/user.module';
     PaperParserModule,
     PaperModule,
     UserModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
