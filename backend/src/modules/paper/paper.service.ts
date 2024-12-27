@@ -4,6 +4,7 @@ import { PaperParserService } from '../paper-parser/paper-parser.service';
 import { PubmedService } from '../pubmed/pubmed.service';
 import { ParsedPaper } from '../paper-parser/types/parsed-paper.type';
 import { ConductscienceSdkService } from '../conductscienceSdk/conductscienceSdk.service';
+import { ProductService } from '../product/product.service';
 
 @Injectable()
 export class PaperService {
@@ -12,6 +13,7 @@ export class PaperService {
     private readonly paperParserService: PaperParserService,
     private readonly pubmedService: PubmedService,
     private readonly conductscienceSdkService: ConductscienceSdkService,
+    private readonly productService: ProductService,
   ) {}
 
   async parsePaper(pubmedId: string, pubmedData: ParsedPaper) {
@@ -62,11 +64,12 @@ export class PaperService {
         let url;
 
         try {
-          const data = await this.conductscienceSdkService.products.getByTitle({
-            title: item.material,
+          const data = await this.productService.searchOne(item.material, {
+            min_text_match: 578730123365712000,
           });
-          if (data?.length) {
-            url = data[0]?.link;
+
+          if (data) {
+            url = `https://conductscience.com/lab/${data.document.name}/`;
           }
         } catch (error) {
           console.error(error);
