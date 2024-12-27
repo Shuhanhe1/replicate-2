@@ -6,6 +6,6 @@ import { ConductscienceSdkModule } from '../conductscienceSdk/conductscienceSdk.
 @Module({
   imports: [PrismaModule, ConductscienceSdkModule],
   providers: [ProductService],
-  exports: [],
+  exports: [ProductService],
 })
 export class ProductModule {}

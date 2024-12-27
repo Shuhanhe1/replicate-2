@@ -7,6 +7,12 @@ interface SearchParams {
   min_text_match: number;
 }
 
+interface ProductSearchResult {
+  id: string;
+  name: string;
+  title: string;
+}
+
 @Injectable()
 export class ProductService implements OnApplicationBootstrap {
   constructor(
@@ -47,12 +53,6 @@ export class ProductService implements OnApplicationBootstrap {
     }
 
     await this.improtToSearchEngine();
-
-    const matche = await this.searchOne('smart system', {
-      min_text_match: 578730123365712000,
-    });
-
-    console.log(123, matche);
   }
 
   private async improtToSearchEngine() {
@@ -72,7 +72,10 @@ export class ProductService implements OnApplicationBootstrap {
       );
   }
 
-  async search(query: string, params?: SearchParams) {
+  async search(
+    query: string,
+    params?: SearchParams,
+  ): Promise<{ document: ProductSearchResult }[]> {
     let { hits } = await typesense.collections('products').documents().search({
       q: query,
       query_by: 'name,title',
@@ -84,12 +87,15 @@ export class ProductService implements OnApplicationBootstrap {
       hits = hits.filter((hit) => hit.text_match >= params.min_text_match);
     }
 
-    return hits;
+    return hits as { document: ProductSearchResult }[];
   }
 
-  async searchOne(query: string, params?: SearchParams) {
+  async searchOne(
+    query: string,
+    params?: SearchParams,
+  ): Promise<{ document: ProductSearchResult } | null> {
     const matches = await this.search(query, params);
 
-    return matches[0];
+    return matches[0] || null;
   }
 }

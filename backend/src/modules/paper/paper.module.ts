@@ -7,6 +7,7 @@ import { PaperController } from './paper.controller';
 import { OpenaiModule } from '../openai/openai.module';
 import { UploadModule } from '../upload/upload.module';
 import { ConductscienceSdkModule } from '../conductscienceSdk/conductscienceSdk.module';
+import { ProductModule } from '../product/product.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConductscienceSdkModule } from '../conductscienceSdk/conductscienceSdk.
     OpenaiModule,
     UploadModule,
     ConductscienceSdkModule,
+    ProductModule,
   ],
   providers: [PaperService],
   controllers: [PaperController],
