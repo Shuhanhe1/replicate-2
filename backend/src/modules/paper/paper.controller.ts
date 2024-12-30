@@ -7,11 +7,12 @@ import {
   NotFoundException,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { ParseSinglePubmedPaperDto } from './paper.dto';
+import { ParseSinglePubmedPaperDto, UpdatePaperBodyDto } from './paper.dto';
 import { PrismaService } from '../database/prisma.service';
 import { PaginationQueryDto } from 'src/common/dto/pagination.dto';
 import { formatPagination } from 'src/common/utils/formatPrismaPagination';
@@ -142,5 +143,54 @@ export class PaperController {
     });
 
     return paper;
+  }
+
+  @Put(':slug')
+  @UseGuards(AccessTokenGuard)
+  @Roles(UserRole.ADMIN)
+  async updatePaper(
+    @Param('slug') slug: string,
+    @Body() body: UpdatePaperBodyDto,
+  ) {
+    const paper = await this.prismaService.paper.findUnique({
+      where: {
+        slug,
+      },
+    });
+
+    if (!paper) throw new NotFoundException('Paper not found');
+
+    if (body.experiments) {
+      for (const experiment of body.experiments) {
+        await this.prismaService.experiment.update({
+          where: {
+            id: experiment.id,
+          },
+          data: {
+            items: {
+              updateMany: experiment.data.items.map((item) => ({
+                where: {
+                  id: item.id,
+                },
+                data: item.data,
+              })),
+            },
+          },
+        });
+      }
+
+      if (body.title) {
+        await this.prismaService.paper.update({
+          where: {
+            id: paper.id,
+          },
+          data: { title: body.title },
+        });
+      }
+
+      return {
+        message: 'Paper updated',
+      };
+    }
   }
 }
