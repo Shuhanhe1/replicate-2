@@ -1,3 +1,5 @@
+import { ExperimentItemData } from './experiment.types';
+
 export interface Paper {
   id: string;
   slug: string;
@@ -10,12 +12,8 @@ export interface Paper {
 
 export interface PaperDetailed extends Paper {
   experiments: {
-    items: {
-      material: string;
-      usage: string;
-      supplier: string;
-      url?: string;
-    }[];
+    id: string;
+    items: ExperimentItemData[];
     title: string;
     instructions: { text: string }[];
     methodologies: { text: string }[];
