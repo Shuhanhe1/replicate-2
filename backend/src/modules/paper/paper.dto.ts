@@ -1,7 +1,6 @@
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -48,7 +47,7 @@ class ExperimentDataDto {
 }
 
 class UpdateExperimentDto {
-  @IsNumber()
+  @IsString()
   id: string;
 
   @IsObject()

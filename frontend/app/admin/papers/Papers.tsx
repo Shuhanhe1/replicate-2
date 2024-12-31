@@ -1,6 +1,7 @@
 'use client';
 import { api } from '@/common/api';
 import { paperApi } from '@/common/api/paper.api';
+import { ROUTES } from '@/common/constants';
 import { usePaginated } from '@/common/hooks';
 import { usePolling } from '@/common/hooks/usePooling';
 import { Paper } from '@/common/types';
@@ -10,6 +11,7 @@ import { CustomLink } from '@/components/ui/CustomLink';
 import { Field } from '@/components/ui/Field';
 import { Modal } from '@/components/ui/Modal/Modal';
 import { Table } from '@/components/ui/Table';
+import Link from 'next/link';
 import { FC, useState } from 'react';
 
 export const Papers: FC = () => {
@@ -67,14 +69,19 @@ export const Papers: FC = () => {
     title: <CustomLink href={`/paper/${paper.slug}`}>{paper.title}</CustomLink>,
     authors: paper.authors.join(', '),
     actions: (
-      <Button
-        onClick={async () => {
-          await paperApi.delete(paper.slug);
-          paginated.refetch();
-        }}
-      >
-        Remove
-      </Button>
+      <div className='flex gap-1'>
+        <Link href={ROUTES.adminPapers.paper(paper.slug)}>
+          <Button>Edit</Button>
+        </Link>
+        <Button
+          onClick={async () => {
+            await paperApi.delete(paper.slug);
+            paginated.refetch();
+          }}
+        >
+          Remove
+        </Button>
+      </div>
     ),
   }));
 
