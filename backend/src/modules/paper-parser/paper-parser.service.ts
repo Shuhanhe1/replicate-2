@@ -42,6 +42,7 @@ export class PaperParserService {
               }
               Author should be formatted this way: "Given-name Surname'
               There is a general rule in paper that an experiment item and its description is then supplied with word FROM (location)FROM(location) is the supplier).
+              Extract as much experiments and items as possible from the paper.
             Paper: ${JSON.stringify(payload.paper)}
             `,
     });

@@ -1,8 +1,7 @@
 import { paperApi } from '@/common/api/paper.api';
 import { FC } from 'react';
-import { Experiment, Experiments } from './Experiments';
+import { Experiments } from './Experiments';
 import { Container } from '@/components/ui/Container';
-import { Button } from '@/components/ui/Button';
 
 export interface AdminPaperPageProps {
   params: {
